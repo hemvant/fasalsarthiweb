@@ -3,21 +3,25 @@
 echo "Pulling latest code..."
 git pull origin main
 
-echo "Building fresh containers..."
-docker compose build --no-cache
+echo "Building staging..."
+docker compose build fasalsarthi_staging
 
-echo "Starting new containers..."
-docker compose up -d --remove-orphans
+echo "Starting staging..."
+docker compose up -d fasalsarthi_staging
 
 echo "Running migrations..."
-docker compose exec laravel_app php artisan migrate --force
+docker compose exec fasalsarthi_staging php artisan migrate --force
 
-echo "Optimizing Laravel..."
-docker compose exec laravel_app php artisan config:cache
-docker compose exec laravel_app php artisan route:cache
-docker compose exec laravel_app php artisan view:cache
+echo "Switching traffic to staging..."
 
-echo "Cleaning old images..."
-docker image prune -f
+sed -i 's/fasalsarthi_live:9000/fasalsarthi_staging:9000/' nginx/default.conf
+docker compose exec nginx nginx -s reload
 
-echo "Deployment completed successfully!"
+echo "Stopping old live..."
+docker stop fasalsarthi_live
+
+echo "Renaming staging to live..."
+
+docker rename fasalsarthi_staging fasalsarthi_live
+
+echo "Deployment complete!"
