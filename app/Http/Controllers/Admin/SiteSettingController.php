@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
+use App\Models\ThemeSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -70,6 +71,10 @@ class SiteSettingController extends Controller
     public function edit(): View
     {
         $settings = SiteSetting::getMany($this->keys);
+        $theme = ThemeSetting::getActive();
+        if ($theme) {
+            $settings = array_merge($settings, $theme->toColorArray());
+        }
         return view('admin.settings.edit', compact('settings'));
     }
 
@@ -128,8 +133,36 @@ class SiteSettingController extends Controller
             'final_cta_subtitle' => 'nullable|string|max:500',
             'final_cta_btn_primary' => 'nullable|string|max:100',
             'final_cta_btn_secondary' => 'nullable|string|max:100',
+            'theme_primary' => 'nullable|string|max:20',
+            'theme_secondary' => 'nullable|string|max:20',
+            'theme_accent' => 'nullable|string|max:20',
+            'theme_text_dark' => 'nullable|string|max:20',
+            'theme_text_light' => 'nullable|string|max:20',
+            'theme_background' => 'nullable|string|max:20',
+            'theme_success' => 'nullable|string|max:20',
+            'theme_warning' => 'nullable|string|max:20',
+            'theme_error' => 'nullable|string|max:20',
         ];
         $data = $request->validate($rules);
+
+        $themeKeys = [
+            'theme_primary' => 'primary_color',
+            'theme_secondary' => 'secondary_color',
+            'theme_accent' => 'accent_color',
+            'theme_text_dark' => 'text_dark_color',
+            'theme_text_light' => 'text_light_color',
+            'theme_background' => 'background_color',
+            'theme_success' => 'success_color',
+            'theme_warning' => 'warning_color',
+            'theme_error' => 'error_color',
+        ];
+        $themeData = [];
+        foreach ($themeKeys as $requestKey => $column) {
+            if (array_key_exists($requestKey, $data)) {
+                $themeData[$column] = $data[$requestKey] ?? null;
+                unset($data[$requestKey]);
+            }
+        }
 
         foreach ($data as $key => $value) {
             if ($key === 'logo') {
@@ -143,6 +176,25 @@ class SiteSettingController extends Controller
                 }
             } else {
                 SiteSetting::set($key, $value ?? '');
+            }
+        }
+
+        if (!empty($themeData)) {
+            $theme = ThemeSetting::first();
+            if ($theme) {
+                $theme->update($themeData);
+            } else {
+                ThemeSetting::create(array_merge($themeData, [
+                    'primary_color' => $themeData['primary_color'] ?? '#059669',
+                    'secondary_color' => $themeData['secondary_color'] ?? '#047857',
+                    'accent_color' => $themeData['accent_color'] ?? '#10B981',
+                    'text_dark_color' => $themeData['text_dark_color'] ?? '#1a1a1a',
+                    'text_light_color' => $themeData['text_light_color'] ?? '#666666',
+                    'background_color' => $themeData['background_color'] ?? '#ffffff',
+                    'success_color' => $themeData['success_color'] ?? '#10B981',
+                    'warning_color' => $themeData['warning_color'] ?? '#F59E0B',
+                    'error_color' => $themeData['error_color'] ?? '#EF4444',
+                ]));
             }
         }
 

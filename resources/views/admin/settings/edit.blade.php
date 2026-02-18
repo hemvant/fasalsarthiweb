@@ -10,6 +10,87 @@
                 @csrf
                 @method('PUT')
 
+                <h6 class="text-success border-bottom pb-2 mb-3">Theme Colors</h6>
+                <p class="text-muted small mb-3">Set colors for the website. Leave blank to use defaults. Use hex codes (e.g. #059669).</p>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label">Primary</label>
+                        <div class="input-group">
+                            <input type="color" class="form-control form-control-color" id="theme_primary_preview" value="{{ old('theme_primary', $settings['theme_primary'] ?? '#059669') }}" title="Choose primary">
+                            <input type="text" name="theme_primary" class="form-control" value="{{ old('theme_primary', $settings['theme_primary'] ?? '') }}" placeholder="#059669" maxlength="20">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Secondary</label>
+                        <div class="input-group">
+                            <input type="color" class="form-control form-control-color" id="theme_secondary_preview" value="{{ old('theme_secondary', $settings['theme_secondary'] ?? '#047857') }}" title="Choose secondary">
+                            <input type="text" name="theme_secondary" class="form-control" value="{{ old('theme_secondary', $settings['theme_secondary'] ?? '') }}" placeholder="#047857" maxlength="20">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Accent</label>
+                        <div class="input-group">
+                            <input type="color" class="form-control form-control-color" id="theme_accent_preview" value="{{ old('theme_accent', $settings['theme_accent'] ?? '#10B981') }}" title="Choose accent">
+                            <input type="text" name="theme_accent" class="form-control" value="{{ old('theme_accent', $settings['theme_accent'] ?? '') }}" placeholder="#10B981" maxlength="20">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Text Dark</label>
+                        <div class="input-group">
+                            <input type="color" class="form-control form-control-color" id="theme_text_dark_preview" value="{{ old('theme_text_dark', $settings['theme_text_dark'] ?? '#1a1a1a') }}" title="Choose text dark">
+                            <input type="text" name="theme_text_dark" class="form-control" value="{{ old('theme_text_dark', $settings['theme_text_dark'] ?? '') }}" placeholder="#1a1a1a" maxlength="20">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Text Light</label>
+                        <div class="input-group">
+                            <input type="color" class="form-control form-control-color" id="theme_text_light_preview" value="{{ old('theme_text_light', $settings['theme_text_light'] ?? '#666666') }}" title="Choose text light">
+                            <input type="text" name="theme_text_light" class="form-control" value="{{ old('theme_text_light', $settings['theme_text_light'] ?? '') }}" placeholder="#666666" maxlength="20">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Background</label>
+                        <div class="input-group">
+                            <input type="color" class="form-control form-control-color" id="theme_background_preview" value="{{ old('theme_background', $settings['theme_background'] ?? '#ffffff') }}" title="Choose background">
+                            <input type="text" name="theme_background" class="form-control" value="{{ old('theme_background', $settings['theme_background'] ?? '') }}" placeholder="#ffffff" maxlength="20">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Success</label>
+                        <div class="input-group">
+                            <input type="color" class="form-control form-control-color" id="theme_success_preview" value="{{ old('theme_success', $settings['theme_success'] ?? '#10B981') }}" title="Success">
+                            <input type="text" name="theme_success" class="form-control" value="{{ old('theme_success', $settings['theme_success'] ?? '') }}" placeholder="#10B981" maxlength="20">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Warning</label>
+                        <div class="input-group">
+                            <input type="color" class="form-control form-control-color" id="theme_warning_preview" value="{{ old('theme_warning', $settings['theme_warning'] ?? '#F59E0B') }}" title="Warning">
+                            <input type="text" name="theme_warning" class="form-control" value="{{ old('theme_warning', $settings['theme_warning'] ?? '') }}" placeholder="#F59E0B" maxlength="20">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Error</label>
+                        <div class="input-group">
+                            <input type="color" class="form-control form-control-color" id="theme_error_preview" value="{{ old('theme_error', $settings['theme_error'] ?? '#EF4444') }}" title="Error">
+                            <input type="text" name="theme_error" class="form-control" value="{{ old('theme_error', $settings['theme_error'] ?? '') }}" placeholder="#EF4444" maxlength="20">
+                        </div>
+                    </div>
+                </div>
+                <script>
+                document.querySelectorAll('input[type="color"]').forEach(function(colorInput) {
+                    var id = colorInput.id;
+                    if (id && id.endsWith('_preview')) {
+                        var textName = id.replace('_preview', '');
+                        var textInput = document.querySelector('input[name="' + textName + '"]');
+                        if (textInput) {
+                            colorInput.addEventListener('input', function() { textInput.value = this.value; });
+                            textInput.addEventListener('input', function() { if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) colorInput.value = this.value; });
+                        }
+                    }
+                });
+                </script>
+
                 <h6 class="text-success border-bottom pb-2 mb-3">General</h6>
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">

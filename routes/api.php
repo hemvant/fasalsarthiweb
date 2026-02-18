@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CropController;
+use App\Http\Controllers\Api\ThemeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +13,8 @@ use App\Http\Controllers\Api\CropController;
 */
 
 Route::prefix('v1')->group(function () {
+    Route::get('theme', [ThemeController::class, 'index']);
+
     // Public: mobile sends OAuth access_token (from Google/Facebook SDK) or auth code for exchange
     Route::post('auth/google', [AuthController::class, 'google']);
     Route::post('auth/google/code', [AuthController::class, 'googleCode']);
