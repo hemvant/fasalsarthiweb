@@ -1,0 +1,326 @@
+{
+  "info": {
+    "name": "FasalSarthi Laravel API",
+    "description": "Test collection for Farming App / Mobile API (Laravel)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://fasalsarthi.in" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Demo Login",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Accept", "value": "application/json" } ],
+            "url": "{{base_url}}/api/v1/auth/demo",
+            "description": "Instant login as demo farmer. No body. Save token from response."
+          }
+        },
+        {
+          "name": "Google (access_token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"access_token\": \"GOOGLE_OAUTH_ACCESS_TOKEN\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/auth/google"
+          }
+        },
+        {
+          "name": "Google (code + redirect_uri)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"AUTH_CODE_FROM_GOOGLE\",\n  \"redirect_uri\": \"https://fasalsarthi.in/api/v1/auth/google/redirect\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/auth/google/code"
+          }
+        },
+        {
+          "name": "Facebook (access_token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"access_token\": \"FACEBOOK_ACCESS_TOKEN\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/auth/facebook"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/api/v1/auth/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Public",
+      "item": [
+        {
+          "name": "Theme",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Accept", "value": "application/json" } ],
+            "url": "{{base_url}}/api/v1/theme"
+          }
+        },
+        {
+          "name": "Community - Crops (dropdown)",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Accept", "value": "application/json" } ],
+            "url": "{{base_url}}/api/v1/community/crops"
+          }
+        },
+        {
+          "name": "Community - Problem Categories",
+          "request": {
+            "method": "GET",
+            "header": [ { "key": "Accept", "value": "application/json" } ],
+            "url": "{{base_url}}/api/v1/community/problem-categories"
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/api/v1/user"
+          }
+        },
+        {
+          "name": "Update profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Farmer Name\",\n  \"mobile\": \"9876543210\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/user"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crops",
+      "item": [
+        {
+          "name": "Catalog crops (list for add)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/api/v1/crops/catalog",
+            "description": "Active crops from DB. Use crop_id from here when creating a farmer crop."
+          }
+        },
+        {
+          "name": "List crops",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/api/v1/crops"
+          }
+        },
+        {
+          "name": "Create crop",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"crop_id\": 1,\n  \"name\": \"Wheat\",\n  \"variety\": \"Local\",\n  \"planted_date\": \"2025-01-01\",\n  \"area\": \"2\",\n  \"notes\": \"Test\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/crops",
+            "description": "crop_id is required (from catalog). name is optional (defaults to catalog title)."
+          }
+        },
+        {
+          "name": "Update crop",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"notes\": \"Updated\"\n}" },
+            "url": "{{base_url}}/api/v1/crops/1"
+          }
+        },
+        {
+          "name": "Delete crop",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/api/v1/crops/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Community",
+      "item": [
+        {
+          "name": "Posts - List (feed)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/api/v1/community/posts?filter=latest",
+            "description": "Query: filter=latest|trending, crop_id, problem_category_id"
+          }
+        },
+        {
+          "name": "Posts - Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "body", "value": "This is my question about crop disease (min 20 chars).", "type": "text" },
+                { "key": "crop_id", "value": "1", "type": "text" },
+                { "key": "problem_category_id", "value": "1", "type": "text" },
+                { "key": "images[]", "type": "file", "src": [] }
+              ]
+            },
+            "url": "{{base_url}}/api/v1/community/posts"
+          }
+        },
+        {
+          "name": "Posts - Show (detail)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/api/v1/community/posts/1"
+          }
+        },
+        {
+          "name": "Like post",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/api/v1/community/posts/1/like"
+          }
+        },
+        {
+          "name": "Like answer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/api/v1/community/answers/1/like"
+          }
+        },
+        {
+          "name": "Add comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"commentable_type\":\"App\\\\Models\\\\CommunityPost\",\"commentable_id\":1,\"body\":\"My comment text\",\"parent_id\":null}"
+            },
+            "url": "{{base_url}}/api/v1/community/comments"
+          }
+        },
+        {
+          "name": "Follow user",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/api/v1/community/follow/2"
+          }
+        },
+        {
+          "name": "Report",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reportable_type\": \"App\\\\Models\\\\CommunityPost\",\n  \"reportable_id\": 1,\n  \"reason\": \"spam\",\n  \"details\": \"Optional details\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/community/report"
+          }
+        }
+      ]
+    }
+  ]
+}

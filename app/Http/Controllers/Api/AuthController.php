@@ -12,6 +12,39 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     /**
+     * Google OAuth redirect for React Native app (FarmingApp) only.
+     * Receives code from Google, redirects to the app's exp:// URL with the code
+     * so the app can receive the callback and then call POST /auth/google/code.
+     * (Expert Portal PWA uses /expert/auth/google/callback and Socialite – separate flow.)
+     */
+    public function googleRedirect(Request $request)
+    {
+        $code = $request->query('code');
+        $state = $request->query('state');
+        $error = $request->query('error');
+
+        if ($state) {
+            $appRedirectUri = trim(urldecode((string) $state));
+            if ($appRedirectUri !== '') {
+                $separator = str_contains($appRedirectUri, '?') ? '&' : '?';
+                if ($code) {
+                    return redirect()->away($appRedirectUri . $separator . 'code=' . urlencode((string) $code));
+                }
+                if ($error) {
+                    return redirect()->away($appRedirectUri . $separator . 'error=' . urlencode((string) $error));
+                }
+                return redirect()->away($appRedirectUri . $separator . 'error=no_code');
+            }
+        }
+
+        \Log::warning('Google redirect missing code/state', ['query' => $request->query()]);
+        return response()->json([
+            'error' => 'Missing code or state',
+            'hint' => 'Add https://fasalsarthi.in/api/v1/auth/google/redirect to Google Console Authorized redirect URIs.',
+        ], 400);
+    }
+
+    /**
      * Exchange Google OAuth authorization code for our token.
      * Mobile app uses expo-auth-session to get the code, then sends it here.
      */
@@ -197,7 +230,7 @@ class AuthController extends Controller
             [
                 'name' => 'Demo Farmer',
                 'email' => 'demo@farmer.app',
-                'password' => null,
+                'password' => 'demo',
             ]
         );
 

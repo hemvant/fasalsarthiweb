@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             BlogCategorySeeder::class,
             PageSeeder::class,
             IrrigationCategorySeeder::class,
+            ProblemCategorySeeder::class,
         ]);
 
         User::factory()->create([

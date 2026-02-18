@@ -87,6 +87,14 @@
                 <a class="nav-link {{ request()->routeIs('admin.irrigation-methods.*') ? 'active' : '' }}" href="{{ route('admin.irrigation-methods.index') }}">
                     <i class="fas fa-tint me-2"></i> Irrigation Methods
                 </a>
+                <hr class="my-2 border-secondary">
+                <span class="px-3 small text-muted text-uppercase">Farmer Community</span>
+                <a class="nav-link {{ request()->routeIs('admin.community.experts.*') ? 'active' : '' }}" href="{{ route('admin.community.experts.index') }}"><i class="fas fa-user-graduate me-2"></i> Experts</a>
+                <a class="nav-link {{ request()->routeIs('admin.community.posts.*') ? 'active' : '' }}" href="{{ route('admin.community.posts.index') }}"><i class="fas fa-comments me-2"></i> Posts</a>
+                <a class="nav-link {{ request()->routeIs('admin.community.reports.*') ? 'active' : '' }}" href="{{ route('admin.community.reports.index') }}"><i class="fas fa-flag me-2"></i> Reports</a>
+                <a class="nav-link {{ request()->routeIs('admin.community.problem-categories.*') ? 'active' : '' }}" href="{{ route('admin.community.problem-categories.index') }}"><i class="fas fa-tags me-2"></i> Problem Categories</a>
+                <a class="nav-link {{ request()->routeIs('admin.community.users.*') ? 'active' : '' }}" href="{{ route('admin.community.users.index') }}"><i class="fas fa-users me-2"></i> Users</a>
+                <a class="nav-link {{ request()->routeIs('admin.community.articles.*') ? 'active' : '' }}" href="{{ route('admin.community.articles.index') }}"><i class="fas fa-newspaper me-2"></i> Expert Articles</a>
                 <a class="nav-link mt-2" href="{{ url('/') }}" target="_blank">
                     <i class="fas fa-external-link-alt me-2"></i> View Site
                 </a>

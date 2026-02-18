@@ -63,6 +63,7 @@
                         <a class="nav-link {{ request()->routeIs('home') ? '' : '' }}" href="{{ route('home') }}#contact">Contact</a>
                     </li>
                 </ul>
+                <a class="btn btn-outline-success me-2" href="{{ route('expert.landing') }}"><i class="fas fa-user-graduate me-1"></i> Join as Expert</a>
                 <a class="btn btn-download" href="{{ route('home') }}#contact">Download App</a>
             </div>
         </div>
@@ -100,6 +101,7 @@
                             <li><a href="{{ route('crop.index') }}">Crops</a></li>
                             <li><a href="{{ route('irrigation.index') }}">Irrigation</a></li>
                             <li><a href="{{ route('blog.index') }}">Blog</a></li>
+                            <li><a href="{{ route('expert.landing') }}">Join as Expert</a></li>
                             <li><a href="{{ route('home') }}#contact">Contact</a></li>
                             <li><a href="{{ route('privacy') }}">Privacy Policy</a></li>
                             <li><a href="{{ route('term') }}">Terms</a></li>

@@ -15,6 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\RedirectIfNotAdmin::class,
+            'expert' => \App\Http\Middleware\EnsureExpert::class,
+            'user.not_banned' => \App\Http\Middleware\EnsureUserNotBanned::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

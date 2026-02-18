@@ -12,9 +12,21 @@
             </h4>
             <p class="text-muted mb-0">
                 You are logged in as <strong>{{ auth()->guard('admin')->user()->name }}</strong>.
-                Use the sidebar to manage your website content. More sections (schemes, crops, irrigation, blog, etc.)
-                will appear here as we make the site dynamic.
+                Use the sidebar to manage your website and the Farmer Community.
             </p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-4 border-start border-4 border-primary">
+            <h6 class="text-muted text-uppercase small mb-2">Community Overview</h6>
+            <ul class="list-unstyled mb-0">
+                <li class="mb-2"><strong>{{ $totalFarmers }}</strong> Farmers (users)</li>
+                <li class="mb-2"><strong>{{ $totalExperts }}</strong> Experts</li>
+                <li class="mb-2"><strong class="text-warning">{{ $pendingExperts }}</strong> Pending expert approvals</li>
+                <li class="mb-2"><strong>{{ $totalPosts }}</strong> Posts</li>
+                <li class="mb-2"><strong>{{ $totalAnswers }}</strong> Answers</li>
+                <li class="mb-2"><strong class="text-danger">{{ $reportedPosts }}</strong> Pending reports</li>
+            </ul>
         </div>
     </div>
     <div class="col-md-4">
@@ -22,7 +34,12 @@
             <h6 class="text-muted text-uppercase small mb-2">Quick links</h6>
             <ul class="list-unstyled mb-0">
                 <li class="mb-2"><a href="{{ url('/') }}" target="_blank" class="text-decoration-none">View homepage</a></li>
-                <li class="mb-2"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Dashboard</a></li>
+                @if($pendingExperts > 0)
+                <li class="mb-2"><a href="{{ route('admin.community.experts.index') }}?status=pending" class="text-decoration-none">Review pending experts</a></li>
+                @endif
+                @if($reportedPosts > 0)
+                <li class="mb-2"><a href="{{ route('admin.community.reports.index') }}" class="text-decoration-none">Review reports</a></li>
+                @endif
             </ul>
         </div>
     </div>

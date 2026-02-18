@@ -1,20 +1,33 @@
 version: "3.9"
 
 services:
-  laravel_app:
+  laravel_blue:
     build: .
-    container_name: fasalsarthiweb_laravel
+    container_name: laravel_blue
     environment:
       APP_ENV: production
-      APP_DEBUG: true
+      APP_DEBUG: false
       DB_CONNECTION: pgsql
       DB_HOST: db
       DB_PORT: 5432
       DB_DATABASE: fasalsarthi
       DB_USERNAME: pgsql
       DB_PASSWORD: Developer@014789
-    volumes:
-      - .:/var/www/html
+    networks:
+      - fasalsarthi_network
+
+  laravel_green:
+    build: .
+    container_name: laravel_green
+    environment:
+      APP_ENV: production
+      APP_DEBUG: false
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: fasalsarthi
+      DB_USERNAME: pgsql
+      DB_PASSWORD: Developer@014789
     networks:
       - fasalsarthi_network
 
@@ -38,11 +51,10 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - .:/var/www/html
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
-      - laravel_app
+      - laravel_blue
     networks:
       - fasalsarthi_network
 

@@ -14,6 +14,7 @@ class UserCrop extends Model
 
     protected $fillable = [
         'user_id',
+        'crop_id',
         'name',
         'variety',
         'area',
@@ -46,5 +47,10 @@ class UserCrop extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function crop(): BelongsTo
+    {
+        return $this->belongsTo(Crop::class, 'crop_id');
     }
 }

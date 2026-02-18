@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Crop;
 use App\Models\UserCrop;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,12 +11,26 @@ use Illuminate\Http\Request;
 class CropController extends Controller
 {
     /**
-     * List authenticated user's crops.
+     * List crops from DB (catalog) – for farmer to choose when adding. Only active crops.
+     */
+    public function catalog(Request $request): JsonResponse
+    {
+        $crops = Crop::where('is_active', true)
+            ->orderBy('title')
+            ->get(['id', 'title', 'slug'])
+            ->map(fn (Crop $c) => ['id' => $c->id, 'title' => $c->title, 'slug' => $c->slug]);
+
+        return response()->json(['crops' => $crops]);
+    }
+
+    /**
+     * List authenticated user's crops (farmer's added crops).
      */
     public function index(Request $request): JsonResponse
     {
         $crops = $request->user()
             ->crops()
+            ->with('crop:id,title,slug')
             ->orderBy('updated_at', 'desc')
             ->get()
             ->map(fn (UserCrop $c) => $this->cropResource($c));
@@ -24,12 +39,13 @@ class CropController extends Controller
     }
 
     /**
-     * Store a new crop for the authenticated user.
+     * Store a new crop for the authenticated user. crop_id must be an active catalog crop.
      */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'crop_id' => 'required|integer|exists:crops,id',
+            'name' => 'nullable|string|max:255',
             'variety' => 'nullable|string|max:255',
             'area' => 'nullable|numeric|min:0',
             'stage' => 'nullable|string|max:100',
@@ -47,12 +63,30 @@ class CropController extends Controller
             'icon' => 'nullable|string|max:50',
         ]);
 
-        $crop = $request->user()->crops()->create(array_merge($validated, [
-            'area' => $validated['area'] ?? 0,
-            'health' => $validated['health'] ?? 'good',
-        ]));
+        $catalogCrop = Crop::where('id', $validated['crop_id'])->where('is_active', true)->firstOrFail();
+        $name = $validated['name'] ?? $catalogCrop->title;
 
-        return response()->json(['crop' => $this->cropResource($crop)], 201);
+        $userCrop = $request->user()->crops()->create([
+            'crop_id' => $catalogCrop->id,
+            'name' => $name,
+            'variety' => $validated['variety'] ?? null,
+            'area' => $validated['area'] ?? 0,
+            'stage' => $validated['stage'] ?? null,
+            'health' => $validated['health'] ?? 'good',
+            'farm_name' => $validated['farm_name'] ?? null,
+            'notes' => $validated['notes'] ?? null,
+            'planted_date' => $validated['planted_date'] ?? null,
+            'expected_harvest' => $validated['expected_harvest'] ?? null,
+            'yield_estimate' => $validated['yield_estimate'] ?? null,
+            'last_irrigation' => $validated['last_irrigation'] ?? null,
+            'next_action' => $validated['next_action'] ?? null,
+            'water_needs' => $validated['water_needs'] ?? null,
+            'nutrient_level' => $validated['nutrient_level'] ?? null,
+            'temperature_range' => $validated['temperature_range'] ?? null,
+            'icon' => $validated['icon'] ?? null,
+        ]);
+
+        return response()->json(['crop' => $this->cropResource($userCrop->load('crop'))], 201);
     }
 
     /**
@@ -63,6 +97,7 @@ class CropController extends Controller
         $crop = $request->user()->crops()->findOrFail($id);
 
         $validated = $request->validate([
+            'crop_id' => 'sometimes|nullable|integer|exists:crops,id',
             'name' => 'sometimes|string|max:255',
             'variety' => 'nullable|string|max:255',
             'area' => 'nullable|numeric|min:0',
@@ -81,9 +116,13 @@ class CropController extends Controller
             'icon' => 'nullable|string|max:50',
         ]);
 
+        if (array_key_exists('crop_id', $validated) && $validated['crop_id']) {
+            $catalogCrop = Crop::where('id', $validated['crop_id'])->where('is_active', true)->firstOrFail();
+            $validated['name'] = $validated['name'] ?? $catalogCrop->title;
+        }
         $crop->update($validated);
 
-        return response()->json(['crop' => $this->cropResource($crop->fresh())]);
+        return response()->json(['crop' => $this->cropResource($crop->fresh()->load('crop'))]);
     }
 
     /**
@@ -100,6 +139,8 @@ class CropController extends Controller
     {
         return [
             'id' => (string) $c->id,
+            'crop_id' => $c->crop_id ? (string) $c->crop_id : null,
+            'catalog_title' => $c->relationLoaded('crop') && $c->crop ? $c->crop->title : null,
             'name' => $c->name,
             'variety' => $c->variety ?? '',
             'area' => (string) $c->area,
