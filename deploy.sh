@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 echo "Pulling latest code..."
@@ -11,23 +10,25 @@ docker compose build fasalsarthi_staging
 echo "Starting staging..."
 docker compose up -d fasalsarthi_staging
 
-echo "Waiting for staging to boot..."
+echo "Waiting for staging..."
 sleep 5
 
 echo "Running migrations..."
 docker compose exec fasalsarthi_staging php artisan migrate --force
 
-echo "Switching traffic to staging..."
-sed -i 's/fasalsarthi_live:9000/fasalsarthi_staging:9000/' nginx/default.conf
-docker compose exec nginx nginx -s reload
-
-echo "Stopping old live..."
+echo "Stopping live..."
 docker stop fasalsarthi_live || true
 
-echo "Removing old live..."
-docker rm fasalsarthi_live || true
+echo "Renaming live to old_live..."
+docker rename fasalsarthi_live fasalsarthi_old || true
 
 echo "Renaming staging to live..."
 docker rename fasalsarthi_staging fasalsarthi_live
+
+echo "Reloading nginx..."
+docker compose exec nginx nginx -s reload
+
+echo "Removing old container..."
+docker rm fasalsarthi_old || true
 
 echo "Deployment complete!"
