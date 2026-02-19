@@ -68,14 +68,27 @@
         var btn = document.getElementById('expert-install-btn');
         if (btn) { btn.style.display = 'inline-block'; }
       });
-      document.getElementById('expert-install-btn') && document.getElementById('expert-install-btn').addEventListener('click', function(e) {
-        e.preventDefault();
+      function expertDoInstall() {
         if (expertInstallPrompt) {
           expertInstallPrompt.prompt();
           expertInstallPrompt.userChoice.then(function(choice) {
             expertInstallPrompt = null;
-            document.getElementById('expert-install-btn').style.display = 'none';
+            var btn = document.getElementById('expert-install-btn');
+            if (btn) btn.style.display = 'none';
           });
+          return true;
+        }
+        return false;
+      }
+      document.getElementById('expert-install-btn') && document.getElementById('expert-install-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        expertDoInstall();
+      });
+      document.getElementById('expert-install-landing-link') && document.getElementById('expert-install-landing-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (!expertDoInstall()) {
+          var el = document.getElementById('expert-install-help');
+          if (el && window.bootstrap && bootstrap.Modal) bootstrap.Modal.getOrCreateInstance(el).show();
         }
       });
     </script>
