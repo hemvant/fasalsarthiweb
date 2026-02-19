@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\CommunityAnswer;
 use App\Models\CommunityPost;
 use App\Models\Crop;
+use App\Models\PostImage;
 use App\Models\ProblemCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class QuestionController extends Controller
@@ -53,6 +55,47 @@ class QuestionController extends Controller
         $liked = $user ? $post->likes()->where('user_id', $user->id)->exists() : false;
         $saved = $user ? $user->savedPosts()->where('community_post_id', $post->id)->exists() : false;
         return view('expert.questions.show', compact('post', 'liked', 'saved'));
+    }
+
+    public function create(Request $request): View
+    {
+        $categories = ProblemCategory::where('is_active', true)->orderBy('sort_order')->get(['id', 'name']);
+        $crops = Crop::where('is_active', true)->orderBy('title')->get(['id', 'title']);
+        return view('expert.questions.create', compact('categories', 'crops'));
+    }
+
+    public function storePost(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'body' => 'required|string|min:20|max:5000',
+            'problem_category_id' => 'required|exists:problem_categories,id',
+            'crop_id' => 'nullable|exists:crops,id',
+            'images' => 'nullable|array|max:3',
+            'images.*' => 'image|max:5120',
+        ]);
+
+        $post = DB::transaction(function () use ($request) {
+            $post = CommunityPost::create([
+                'user_id' => $request->user()->id,
+                'crop_id' => $request->crop_id ?: null,
+                'problem_category_id' => $request->problem_category_id,
+                'body' => $request->body,
+                'status' => 'active',
+            ]);
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $i => $file) {
+                    $path = $file->store('community/posts', 'public');
+                    PostImage::create([
+                        'community_post_id' => $post->id,
+                        'path' => $path,
+                        'sort_order' => $i,
+                    ]);
+                }
+            }
+            return $post;
+        });
+
+        return redirect()->route('expert.questions.show', $post)->with('success', 'Post created.');
     }
 
     public function storeAnswer(Request $request, CommunityPost $post): RedirectResponse

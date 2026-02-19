@@ -48,6 +48,8 @@ Route::prefix('expert')->name('expert.')->group(function () {
         Route::middleware('expert')->group(function () {
             Route::get('dashboard', [\App\Http\Controllers\Expert\DashboardController::class, 'index'])->name('dashboard');
             Route::get('questions', [\App\Http\Controllers\Expert\QuestionController::class, 'index'])->name('questions.index');
+            Route::get('questions/create', [\App\Http\Controllers\Expert\QuestionController::class, 'create'])->name('questions.create');
+            Route::post('questions', [\App\Http\Controllers\Expert\QuestionController::class, 'storePost'])->name('questions.store');
             Route::get('questions/{post}', [\App\Http\Controllers\Expert\QuestionController::class, 'show'])->name('questions.show');
             Route::post('questions/{post}/answer', [\App\Http\Controllers\Expert\QuestionController::class, 'storeAnswer'])->name('questions.answer');
             Route::post('questions/{post}/solved', [\App\Http\Controllers\Expert\QuestionController::class, 'markSolved'])->name('questions.solved');

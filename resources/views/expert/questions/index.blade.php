@@ -3,6 +3,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h3 class="mb-0">Community</h3>
+    <a href="{{ route('expert.questions.create') }}" class="btn btn-success"><i class="fas fa-plus me-1"></i> New post</a>
 </div>
 
 {{-- Category / filter tabs --}}
