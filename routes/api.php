@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ThemeController;
 use App\Http\Controllers\Api\CommunityPostController;
 use App\Http\Controllers\Api\CommunityActionController;
 use App\Http\Controllers\Api\CommunityDataController;
+use App\Http\Controllers\Api\WeatherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,10 @@ Route::prefix('v1')->group(function () {
         Route::post('crops', [CropController::class, 'store']);
         Route::patch('crops/{id}', [CropController::class, 'update']);
         Route::delete('crops/{id}', [CropController::class, 'destroy']);
+
+        // Weather (location-based, refresh every 4 hours)
+        Route::get('weather', [WeatherController::class, 'show']);
+        Route::post('weather/refresh', [WeatherController::class, 'refresh']);
 
         // Community
         Route::get('community/posts', [CommunityPostController::class, 'index']);

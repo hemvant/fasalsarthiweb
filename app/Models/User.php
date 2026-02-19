@@ -62,6 +62,11 @@ class User extends Authenticatable
         return $this->hasMany(UserCrop::class, 'user_id');
     }
 
+    public function weather(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(UserWeather::class, 'user_id');
+    }
+
     public function expertProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(ExpertProfile::class);
