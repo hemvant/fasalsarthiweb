@@ -59,7 +59,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('{{ asset("expert-sw.js") }}').catch(function() {});
+        navigator.serviceWorker.register('/expert-sw.js').catch(function() {});
       }
       var expertInstallPrompt;
       window.addEventListener('beforeinstallprompt', function(e) {

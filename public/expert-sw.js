@@ -1,12 +1,33 @@
-const CACHE = 'expert-portal-v1';
-self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(['/expert', '/expert/dashboard'])));
+const CACHE = "expert-portal-v1";
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE).then((cache) => {
+      return cache.addAll([
+        "/expert/",
+        "/expert/dashboard"
+      ]);
+    })
+  );
   self.skipWaiting();
 });
-self.addEventListener('activate', (e) => {
-  e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))));
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.filter((key) => key !== CACHE)
+            .map((key) => caches.delete(key))
+      )
+    )
+  );
   self.clients.claim();
 });
-self.addEventListener('fetch', (e) => {
-  e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+
+self.addEventListener("fetch", (event) => {
+  if (event.request.url.includes("/expert")) {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(event.request))
+    );
+  }
 });
