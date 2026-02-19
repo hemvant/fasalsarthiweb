@@ -22,55 +22,43 @@
     @stack('styles')
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('home') }}">
-                @if(!empty($siteLogo))
-                    <img src="{{ $siteLogo }}" alt="{{ $siteTitle ?? 'FasalSarthi' }}" style="height:35px;width:auto;">
-                @else
-                    <div class="icon"><i class="fas fa-seedling"></i></div>
-                @endif
-                {{ $siteTitle ?? 'FasalSarthi' }}
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('feature.*') ? 'active' : '' }}" href="{{ route('feature.index') }}">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('try-ai') ? 'active' : '' }}" href="{{ route('try-ai') }}">Try AI</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('scheme*') ? 'active' : '' }}" href="{{ route('scheme.index') }}">Schemes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('crop*') ? 'active' : '' }}" href="{{ route('crop.index') }}">Crops</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('irrigation*') ? 'active' : '' }}" href="{{ route('irrigation.index') }}">Irrigation</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('blog*') ? 'active' : '' }}" href="{{ route('blog.index') }}">Blog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('home') ? '' : '' }}" href="{{ route('home') }}#testimonials">Testimonials</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('home') ? '' : '' }}" href="{{ route('home') }}#contact">Contact</a>
-                    </li>
-                </ul>
-                <a class="btn btn-outline-success me-2" href="{{ route('expert.landing') }}"><i class="fas fa-user-graduate me-1"></i> Join as Expert</a>
-                <a class="btn btn-download" href="{{ route('home') }}#contact">Download App</a>
+    <!-- Header / Navigation -->
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+            <div class="container navbar-container">
+                <a class="navbar-brand" href="{{ route('home') }}">
+                    @if(!empty($siteLogo))
+                        <img src="{{ $siteLogo }}" alt="{{ $siteTitle ?? 'FasalSarthi' }}" class="brand-logo">
+                    @else
+                        <span class="brand-icon"><i class="fas fa-seedling"></i></span>
+                    @endif
+                    <span class="brand-text">{{ $siteTitle ?? 'FasalSarthi' }}</span>
+                </a>
+                <button class="navbar-toggler nav-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle menu">
+                    <span class="toggler-bar"></span>
+                    <span class="toggler-bar"></span>
+                    <span class="toggler-bar"></span>
+                </button>
+                <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
+                    <ul class="navbar-nav nav-links">
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}"><i class="fas fa-home nav-icon d-lg-none"></i>Home</a></li>
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('feature.*') ? 'active' : '' }}" href="{{ route('feature.index') }}"><i class="fas fa-star nav-icon d-lg-none"></i>Features</a></li>
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('try-ai') ? 'active' : '' }}" href="{{ route('try-ai') }}"><i class="fas fa-robot nav-icon d-lg-none"></i>Try AI</a></li>
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('scheme*') ? 'active' : '' }}" href="{{ route('scheme.index') }}"><i class="fas fa-file-alt nav-icon d-lg-none"></i>Schemes</a></li>
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('crop*') ? 'active' : '' }}" href="{{ route('crop.index') }}"><i class="fas fa-leaf nav-icon d-lg-none"></i>Crops</a></li>
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('irrigation*') ? 'active' : '' }}" href="{{ route('irrigation.index') }}"><i class="fas fa-tint nav-icon d-lg-none"></i>Irrigation</a></li>
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('blog*') ? 'active' : '' }}" href="{{ route('blog.index') }}"><i class="fas fa-newspaper nav-icon d-lg-none"></i>Blog</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('home') }}#testimonials"><i class="fas fa-quote-right nav-icon d-lg-none"></i>Testimonials</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('home') }}#contact"><i class="fas fa-envelope nav-icon d-lg-none"></i>Contact</a></li>
+                    </ul>
+                    <div class="navbar-actions">
+                        <a class="btn btn-nav btn-outline-success" href="{{ route('expert.landing') }}"><i class="fas fa-user-graduate me-1"></i> Join as Expert</a>
+                        <a class="btn btn-nav btn-download" href="{{ route('home') }}#contact"><i class="fas fa-download me-1"></i> Download App</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
     @yield('content')
 
