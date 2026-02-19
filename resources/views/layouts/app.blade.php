@@ -42,7 +42,10 @@
                         <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('feature') ? 'active' : '' }}" href="{{ route('feature') }}">Features</a>
+                        <a class="nav-link {{ request()->routeIs('feature.*') ? 'active' : '' }}" href="{{ route('feature.index') }}">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('try-ai') ? 'active' : '' }}" href="{{ route('try-ai') }}">Try AI</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('scheme*') ? 'active' : '' }}" href="{{ route('scheme.index') }}">Schemes</a>
@@ -96,7 +99,8 @@
                     <div class="footer-links">
                         <h6>Quick Links</h6>
                         <ul>
-                            <li><a href="{{ route('feature') }}">Features</a></li>
+                            <li><a href="{{ route('feature.index') }}">Features</a></li>
+                            <li><a href="{{ route('try-ai') }}">Try AI</a></li>
                             <li><a href="{{ route('scheme.index') }}">Schemes</a></li>
                             <li><a href="{{ route('crop.index') }}">Crops</a></li>
                             <li><a href="{{ route('irrigation.index') }}">Irrigation</a></li>

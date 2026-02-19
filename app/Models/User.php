@@ -26,6 +26,7 @@ class User extends Authenticatable
         'provider',
         'provider_id',
         'mobile',
+        'settings',
         'is_banned',
         'suspended_until',
     ];
@@ -52,6 +53,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_banned' => 'boolean',
             'suspended_until' => 'datetime',
+            'settings' => 'array',
         ];
     }
 

@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [PageController::class, 'home'])->name('home');
-Route::get('/features', [PageController::class, 'feature'])->name('feature');
+Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.submit');
+Route::get('/features', [PageController::class, 'featureIndex'])->name('feature.index');
+Route::get('/features/{slug}', [PageController::class, 'featureShow'])->name('feature.show');
 Route::get('/schemes', [PageController::class, 'schemeIndex'])->name('scheme.index');
 Route::get('/schemes/{slug}', [PageController::class, 'schemeShow'])->name('scheme.show');
 Route::get('/crops', [PageController::class, 'cropIndex'])->name('crop.index');
@@ -22,6 +24,12 @@ Route::get('/blog', [PageController::class, 'blogIndex'])->name('blog.index');
 Route::get('/blog/{slug}', [PageController::class, 'blogShow'])->name('blog.show');
 Route::get('/terms', [PageController::class, 'term'])->name('term');
 Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
+
+Route::post('/newsletter/subscribe', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::get('/try-ai', [PageController::class, 'tryAi'])->name('try-ai');
+Route::post('/ai/chat', [\App\Http\Controllers\AiController::class, 'chat'])->name('ai.chat');
+Route::post('/ai/identify-disease', [\App\Http\Controllers\AiController::class, 'identifyDisease'])->name('ai.identify-disease');
+Route::get('/ai/limits', [\App\Http\Controllers\AiController::class, 'limits'])->name('ai.limits');
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +76,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'edit'])->name('settings.edit');
         Route::put('settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'update'])->name('settings.update');
 
+        Route::get('newsletter', [\App\Http\Controllers\Admin\NewsletterSubscriberController::class, 'index'])->name('newsletter.index');
+        Route::get('contact-messages', [\App\Http\Controllers\Admin\ContactMessageController::class, 'index'])->name('contact-messages.index');
+        Route::get('contact-messages/{contact_message}', [\App\Http\Controllers\Admin\ContactMessageController::class, 'show'])->name('contact-messages.show');
+        Route::put('contact-messages/{contact_message}', [\App\Http\Controllers\Admin\ContactMessageController::class, 'update'])->name('contact-messages.update');
+
         Route::prefix('community')->name('community.')->group(function () {
             Route::get('experts', [\App\Http\Controllers\Admin\CommunityExpertController::class, 'index'])->name('experts.index');
             Route::get('experts/{expert_profile}', [\App\Http\Controllers\Admin\CommunityExpertController::class, 'show'])->name('experts.show');
@@ -101,6 +114,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('articles/{article}', [\App\Http\Controllers\Admin\ExpertArticleController::class, 'destroy'])->name('articles.destroy');
         });
 
+        Route::resource('features', \App\Http\Controllers\Admin\FeatureController::class)->names('features')->except(['show']);
         Route::resource('crop-categories', \App\Http\Controllers\Admin\CropCategoryController::class)->names('crop-categories');
         Route::resource('crops', \App\Http\Controllers\Admin\CropController::class)->names('crops');
         Route::resource('scheme-categories', \App\Http\Controllers\Admin\SchemeCategoryController::class)->names('scheme-categories');

@@ -60,6 +60,15 @@
                 <a class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.edit') }}">
                     <i class="fas fa-cog me-2"></i> Site Settings
                 </a>
+                <a class="nav-link {{ request()->routeIs('admin.contact-messages.*') ? 'active' : '' }}" href="{{ route('admin.contact-messages.index') }}">
+                    <i class="fas fa-envelope me-2"></i> Contact Messages
+                </a>
+                <a class="nav-link {{ request()->routeIs('admin.newsletter.*') ? 'active' : '' }}" href="{{ route('admin.newsletter.index') }}">
+                    <i class="fas fa-newspaper me-2"></i> Newsletter
+                </a>
+                <a class="nav-link {{ request()->routeIs('admin.features.*') ? 'active' : '' }}" href="{{ route('admin.features.index') }}">
+                    <i class="fas fa-star me-2"></i> Features
+                </a>
                 <a class="nav-link {{ request()->routeIs('admin.crop-categories.*') ? 'active' : '' }}" href="{{ route('admin.crop-categories.index') }}">
                     <i class="fas fa-folder me-2"></i> Crop Categories
                 </a>

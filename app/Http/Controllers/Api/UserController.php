@@ -19,6 +19,7 @@ class UserController extends Controller
                 'email' => $user->email,
                 'mobile' => $user->mobile,
                 'provider' => $user->provider,
+                'settings' => $user->settings ?? [],
             ],
         ]);
     }
@@ -28,17 +29,20 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'mobile' => 'sometimes|nullable|string|max:20',
+            'settings' => 'sometimes|nullable|array',
         ]);
 
         $request->user()->update($validated);
 
+        $user = $request->user()->fresh();
         return response()->json([
             'user' => [
-                'id' => $request->user()->id,
-                'name' => $request->user()->name,
-                'email' => $request->user()->email,
-                'mobile' => $request->user()->mobile,
-                'provider' => $request->user()->provider,
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'mobile' => $user->mobile,
+                'provider' => $user->provider,
+                'settings' => $user->settings ?? [],
             ],
         ]);
     }

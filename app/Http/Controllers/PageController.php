@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
 use App\Models\Crop;
+use App\Models\Feature;
 use App\Models\CropCategory;
 use App\Models\IrrigationCategory;
 use App\Models\IrrigationMethod;
@@ -36,13 +37,40 @@ class PageController extends Controller
     public function home(): View
     {
         $home = SiteSetting::getMany(self::homeSettingKeys());
-        return view('pages.home', compact('home'));
+        $featuredCrops = Crop::with('category')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->limit(6)
+            ->get();
+        $latestPosts = BlogPost::with('category')
+            ->where('is_active', true)
+            ->whereNotNull('published_at')
+            ->orderBy('published_at', 'desc')
+            ->limit(3)
+            ->get();
+        $stats = [
+            'crops_count' => Crop::where('is_active', true)->count(),
+            'schemes_count' => Scheme::where('is_active', true)->count(),
+            'blog_count' => BlogPost::where('is_active', true)->count(),
+        ];
+        $features = Feature::where('is_active', true)->orderBy('sort_order')->orderBy('title')->limit(6)->get();
+        return view('pages.home', compact('home', 'featuredCrops', 'latestPosts', 'stats', 'features'));
     }
 
-    public function feature(): View
+    public function featureIndex(): View
     {
-        $latestPosts = BlogPost::with('category')->where('is_active', true)->orderBy('published_at', 'desc')->limit(3)->get();
-        return view('pages.feature', compact('latestPosts'));
+        $home = SiteSetting::getMany(['features_title', 'features_subtitle']);
+        $features = Feature::where('is_active', true)->orderBy('sort_order')->orderBy('title')->get();
+        $latestPosts = BlogPost::with('category')->where('is_active', true)->whereNotNull('published_at')->orderBy('published_at', 'desc')->limit(3)->get();
+        return view('pages.feature', compact('home', 'features', 'latestPosts'));
+    }
+
+    public function featureShow(string $slug): View|Response
+    {
+        $feature = Feature::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $relatedFeatures = Feature::where('is_active', true)->where('id', '!=', $feature->id)->orderBy('sort_order')->orderBy('title')->limit(3)->get();
+        return view('pages.feature-detail', compact('feature', 'relatedFeatures'));
     }
 
     public function schemeIndex(): View
@@ -150,6 +178,11 @@ class PageController extends Controller
             ->get();
         $recentPosts = BlogPost::where('is_active', true)->where('id', '!=', $post->id)->orderBy('published_at', 'desc')->limit(5)->get();
         return view('pages.blog-detail', compact('post', 'relatedPosts', 'categories', 'recentPosts'));
+    }
+
+    public function tryAi(): View
+    {
+        return view('pages.try-ai');
     }
 
     public function term(): View|Response

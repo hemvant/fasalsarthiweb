@@ -46,4 +46,13 @@ return [
         'client_secret' => env('FACEBOOK_APP_SECRET'),
     ],
 
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+    ],
+
+    'plantix' => [
+        'key' => env('PLANTIX_API_KEY'),
+        'url' => env('PLANTIX_API_URL', 'https://api.plantix.net/v1/analyze'),
+    ],
+
 ];
