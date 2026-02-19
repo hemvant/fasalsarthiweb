@@ -9,6 +9,7 @@ use App\Models\CommunityPost;
 use App\Models\Follow;
 use App\Models\Like;
 use App\Models\Report;
+use App\Models\SavedPost;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -143,5 +144,26 @@ class CommunityActionController extends Controller
         }
 
         return response()->json(['message' => 'Report submitted.'], 201);
+    }
+
+    /** Save (bookmark) a post. */
+    public function savePost(Request $request, int $id): JsonResponse
+    {
+        $post = CommunityPost::where('status', 'active')->findOrFail($id);
+        $exists = SavedPost::where('user_id', $request->user()->id)->where('community_post_id', $post->id)->exists();
+        if ($exists) {
+            SavedPost::where('user_id', $request->user()->id)->where('community_post_id', $post->id)->delete();
+            return response()->json(['saved' => false]);
+        }
+        SavedPost::create(['user_id' => $request->user()->id, 'community_post_id' => $post->id]);
+        return response()->json(['saved' => true]);
+    }
+
+    /** Unsave (remove bookmark) a post. */
+    public function unsavePost(Request $request, int $id): JsonResponse
+    {
+        $post = CommunityPost::where('status', 'active')->findOrFail($id);
+        SavedPost::where('user_id', $request->user()->id)->where('community_post_id', $post->id)->delete();
+        return response()->json(['saved' => false]);
     }
 }

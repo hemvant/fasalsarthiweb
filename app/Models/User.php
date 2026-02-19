@@ -112,6 +112,12 @@ class User extends Authenticatable
         return $this->hasMany(ExpertArticle::class, 'user_id');
     }
 
+    public function savedPosts(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(CommunityPost::class, 'saved_posts', 'user_id', 'community_post_id')
+            ->withTimestamps();
+    }
+
     public function isExpert(): bool
     {
         $profile = $this->expertProfile;

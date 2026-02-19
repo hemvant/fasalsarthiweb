@@ -17,7 +17,7 @@
             @auth
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="{{ route('expert.dashboard') }}">Dashboard</a>
-                <a class="nav-link" href="{{ route('expert.questions.index') }}">Questions</a>
+                <a class="nav-link" href="{{ route('expert.questions.index') }}">Community</a>
                 <a class="nav-link" href="{{ route('expert.articles.index') }}">Articles</a>
                 <a class="nav-link" href="{{ route('expert.profile.edit') }}">Profile</a>
                 <a class="nav-link" href="#" id="expert-install-btn" style="display:none"><i class="fas fa-download me-1"></i> Install app</a>

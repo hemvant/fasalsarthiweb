@@ -51,6 +51,8 @@ Route::prefix('v1')->group(function () {
         Route::post('community/posts', [CommunityPostController::class, 'store']);
         Route::get('community/posts/{id}', [CommunityPostController::class, 'show']);
         Route::post('community/posts/{id}/like', [CommunityActionController::class, 'likePost']);
+        Route::post('community/posts/{id}/save', [CommunityActionController::class, 'savePost']);
+        Route::post('community/posts/{id}/unsave', [CommunityActionController::class, 'unsavePost']);
         Route::post('community/answers/{id}/like', [CommunityActionController::class, 'likeAnswer']);
         Route::post('community/comments', [CommunityActionController::class, 'storeComment']);
         Route::post('community/follow/{userId}', [CommunityActionController::class, 'follow']);

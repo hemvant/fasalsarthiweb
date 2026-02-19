@@ -120,9 +120,11 @@ class CommunityPostController extends Controller
     private function postResource(CommunityPost $post, $user): array
     {
         $liked = $user ? $post->likes()->where('user_id', $user->id)->exists() : false;
+        $saved = $user ? $user->savedPosts()->where('community_post_id', $post->id)->exists() : false;
         return [
             'id' => $post->id,
             'farmer_name' => $post->user?->name,
+            'user_id' => $post->user_id,
             'crop' => $post->crop ? ['id' => $post->crop->id, 'title' => $post->crop->title] : null,
             'problem_type' => $post->problemCategory ? ['id' => $post->problemCategory->id, 'name' => $post->problemCategory->name] : null,
             'body' => $post->body,
@@ -130,8 +132,10 @@ class CommunityPostController extends Controller
             'likes_count' => $post->likes_count,
             'comments_count' => $post->comments_count,
             'expert_replied' => $post->expert_replied,
+            'is_solved' => $post->is_solved,
             'created_at' => $post->created_at->toIso8601String(),
             'liked' => $liked,
+            'saved' => $saved,
         ];
     }
 
@@ -155,9 +159,11 @@ class CommunityPostController extends Controller
                 'liked' => $answerLiked,
             ];
         });
+        $saved = $user ? $user->savedPosts()->where('community_post_id', $post->id)->exists() : false;
         return [
             'id' => $post->id,
             'farmer_name' => $post->user?->name,
+            'user_id' => $post->user_id,
             'crop' => $post->crop ? ['id' => $post->crop->id, 'title' => $post->crop->title] : null,
             'problem_type' => $post->problemCategory ? ['id' => $post->problemCategory->id, 'name' => $post->problemCategory->name] : null,
             'body' => $post->body,
@@ -169,6 +175,7 @@ class CommunityPostController extends Controller
             'is_solved' => $post->is_solved,
             'created_at' => $post->created_at->toIso8601String(),
             'liked' => $liked,
+            'saved' => $saved,
             'answers' => $answers,
             'comments' => $this->commentsTree($post->comments),
         ];

@@ -15,7 +15,7 @@ class QuestionController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = CommunityPost::with(['user', 'crop', 'problemCategory'])
+        $query = CommunityPost::with(['user', 'crop', 'problemCategory', 'images'])
             ->where('status', 'active');
 
         if ($request->filled('crop_id')) {
@@ -24,19 +24,35 @@ class QuestionController extends Controller
         if ($request->filled('problem_category_id')) {
             $query->where('problem_category_id', $request->problem_category_id);
         }
-        $query->where('is_solved', false)->latest();
+        if ($request->filled('unsolved') && $request->unsolved) {
+            $query->where('is_solved', false);
+        }
+        $query->latest();
 
-        $questions = $query->paginate(15);
+        $questions = $query->paginate(15)->withQueryString();
         $crops = Crop::where('is_active', true)->orderBy('title')->get(['id', 'title']);
         $categories = ProblemCategory::where('is_active', true)->orderBy('sort_order')->get(['id', 'name']);
 
-        return view('expert.questions.index', compact('questions', 'crops', 'categories'));
+        $user = $request->user();
+        $postIds = $questions->pluck('id');
+        $likedIds = $user ? \App\Models\Like::where('likeable_type', CommunityPost::class)
+            ->whereIn('likeable_id', $postIds)
+            ->where('user_id', $user->id)
+            ->pluck('likeable_id')
+            ->flip()
+            ->all() : [];
+        $savedIds = $user ? $user->savedPosts()->whereIn('community_posts.id', $postIds)->pluck('community_posts.id')->flip()->all() : [];
+
+        return view('expert.questions.index', compact('questions', 'crops', 'categories', 'likedIds', 'savedIds'));
     }
 
-    public function show(CommunityPost $post): View
+    public function show(Request $request, CommunityPost $post): View
     {
-        $post->load(['user', 'crop', 'problemCategory', 'images', 'answers' => fn ($q) => $q->with(['user', 'attachments'])->orderByDesc('is_pinned')->orderByDesc('is_best_answer')->latest()]);
-        return view('expert.questions.show', compact('post'));
+        $post->load(['user', 'crop', 'problemCategory', 'images', 'answers' => fn ($q) => $q->with(['user.expertProfile', 'attachments'])->orderByDesc('is_pinned')->orderByDesc('is_best_answer')->latest(), 'comments' => fn ($q) => $q->with('user')->orderBy('created_at')]);
+        $user = $request->user();
+        $liked = $user ? $post->likes()->where('user_id', $user->id)->exists() : false;
+        $saved = $user ? $user->savedPosts()->where('community_post_id', $post->id)->exists() : false;
+        return view('expert.questions.show', compact('post', 'liked', 'saved'));
     }
 
     public function storeAnswer(Request $request, CommunityPost $post): RedirectResponse

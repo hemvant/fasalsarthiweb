@@ -51,6 +51,10 @@ Route::prefix('expert')->name('expert.')->group(function () {
             Route::get('questions/{post}', [\App\Http\Controllers\Expert\QuestionController::class, 'show'])->name('questions.show');
             Route::post('questions/{post}/answer', [\App\Http\Controllers\Expert\QuestionController::class, 'storeAnswer'])->name('questions.answer');
             Route::post('questions/{post}/solved', [\App\Http\Controllers\Expert\QuestionController::class, 'markSolved'])->name('questions.solved');
+            Route::post('questions/{post}/like', [\App\Http\Controllers\Expert\CommunityActionController::class, 'likePost'])->name('questions.like');
+            Route::post('questions/{post}/save', [\App\Http\Controllers\Expert\CommunityActionController::class, 'savePost'])->name('questions.save');
+            Route::post('questions/{post}/unsave', [\App\Http\Controllers\Expert\CommunityActionController::class, 'unsavePost'])->name('questions.unsave');
+            Route::post('questions/{post}/comments', [\App\Http\Controllers\Expert\CommunityActionController::class, 'storeComment'])->name('questions.comments');
             Route::resource('articles', \App\Http\Controllers\Expert\ArticleController::class)->only(['index', 'create', 'store', 'edit', 'update'])->names('articles');
             Route::get('profile', [\App\Http\Controllers\Expert\ProfileController::class, 'edit'])->name('profile.edit');
             Route::put('profile', [\App\Http\Controllers\Expert\ProfileController::class, 'update'])->name('profile.update');
