@@ -8,30 +8,71 @@
     <title>@yield('title', 'Expert Portal') - {{ config('app.name') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/expert-pwa.css') }}">
     @stack('styles')
 </head>
-<body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: #059669;">
+<body class="bg-light expert-pwa">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('expert.landing') }}">Expert Portal</a>
+            <a class="navbar-brand" href="{{ route('expert.landing') }}"><i class="fas fa-leaf me-1"></i> Expert Portal</a>
             @auth
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="{{ route('expert.dashboard') }}">Dashboard</a>
-                <a class="nav-link" href="{{ route('expert.questions.index') }}">Community</a>
-                <a class="nav-link" href="{{ route('expert.articles.index') }}">Articles</a>
-                <a class="nav-link" href="{{ route('expert.profile.edit') }}">Profile</a>
-                <a class="nav-link" href="#" id="expert-install-btn" style="display:none"><i class="fas fa-download me-1"></i> Install app</a>
-                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#expert-install-help"><i class="fas fa-info-circle me-1"></i> Install help</a>
-                <a class="nav-link" href="{{ route('expert.logout') }}" onclick="event.preventDefault(); document.getElementById('expert-logout').submit();">Logout</a>
-                <form id="expert-logout" action="{{ route('expert.logout') }}" method="POST" class="d-none">@csrf</form>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#expertNav" aria-controls="expertNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="expertNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link {{ request()->routeIs('expert.dashboard') ? 'active' : '' }}" href="{{ route('expert.dashboard') }}"><i class="fas fa-tachometer-alt me-1"></i> Dashboard</a>
+                    <a class="nav-link {{ request()->routeIs('expert.questions.*') ? 'active' : '' }}" href="{{ route('expert.questions.index') }}"><i class="fas fa-users me-1"></i> Community</a>
+                    <a class="nav-link {{ request()->routeIs('expert.articles.*') ? 'active' : '' }}" href="{{ route('expert.articles.index') }}"><i class="fas fa-newspaper me-1"></i> Articles</a>
+                    <a class="nav-link {{ request()->routeIs('expert.profile.*') ? 'active' : '' }}" href="{{ route('expert.profile.edit') }}"><i class="fas fa-user me-1"></i> Profile</a>
+                    <a class="nav-link" href="#" id="expert-install-btn" style="display:none"><i class="fas fa-download me-1"></i> Install app</a>
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#expert-install-help"><i class="fas fa-info-circle me-1"></i> Help</a>
+                    <a class="nav-link" href="{{ route('expert.logout') }}" onclick="event.preventDefault(); document.getElementById('expert-logout').submit();"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+                    <form id="expert-logout" action="{{ route('expert.logout') }}" method="POST" class="d-none">@csrf</form>
+                </div>
             </div>
             @endauth
         </div>
     </nav>
     <main class="container py-4">
-        @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
-        @if(session('error'))<div class="alert alert-danger">{{ session('error') }}</div>@endif
-        @if(session('message'))<div class="alert alert-info">{{ session('message') }}</div>@endif
+        @if($errors->any())
+        <div class="validation-errors" role="alert">
+            <strong><i class="fas fa-exclamation-circle me-2"></i>Please fix the following errors:</strong>
+            <ul class="mb-0 mt-2">
+                @foreach($errors->all() as $err)
+                <li>{{ $err }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="alert-icon"><i class="fas fa-check-circle"></i></span>
+            <span>{{ session('success') }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span class="alert-icon"><i class="fas fa-times-circle"></i></span>
+            <span>{{ session('error') }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        @if(session('message'))
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <span class="alert-icon"><i class="fas fa-info-circle"></i></span>
+            <span>{{ session('message') }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        @if(session('warning'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
+            <span>{{ session('warning') }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
         @yield('content')
     </main>
 

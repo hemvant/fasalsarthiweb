@@ -1,0 +1,93 @@
+/* Expert PWA – theme-based design */
+:root {
+    --expert-primary: #059669;
+    --expert-primary-dark: #047857;
+    --expert-primary-light: #d1fae5;
+    --expert-bg: #f0fdf4;
+    --expert-card-bg: #ffffff;
+    --expert-border: #d1fae5;
+    --expert-text: #111827;
+    --expert-text-muted: #6b7280;
+    --expert-danger: #dc3545;
+    --expert-warning: #d97706;
+    --expert-info: #0ea5e9;
+    --expert-shadow: 0 1px 3px rgba(5, 150, 105, 0.08);
+    --expert-radius: 12px;
+    --expert-radius-sm: 8px;
+}
+
+/* Base */
+body.expert-pwa { background: var(--expert-bg) !important; color: var(--expert-text); }
+.expert-pwa main.container { max-width: 960px; }
+
+/* Navbar */
+.expert-pwa .navbar { background: linear-gradient(135deg, var(--expert-primary) 0%, var(--expert-primary-dark) 100%) !important; box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25); }
+.expert-pwa .navbar-brand { font-weight: 700; }
+.expert-pwa .nav-link { border-radius: var(--expert-radius-sm); }
+.expert-pwa .nav-link:hover { background: rgba(255,255,255,0.15); }
+.expert-pwa .nav-link.active { background: rgba(255,255,255,0.2); font-weight: 600; }
+.expert-pwa .navbar-toggler { border-color: rgba(255,255,255,0.5); }
+
+/* Alerts – theme-based with icons */
+.expert-pwa .alert { border: none; border-radius: var(--expert-radius); padding: 1rem 1.25rem; display: flex; align-items: flex-start; gap: 0.75rem; }
+.expert-pwa .alert-success { background: var(--expert-primary-light); color: var(--expert-primary-dark); }
+.expert-pwa .alert-success .alert-icon { color: var(--expert-primary); }
+.expert-pwa .alert-danger { background: #fee2e2; color: #991b1b; }
+.expert-pwa .alert-danger .alert-icon { color: var(--expert-danger); }
+.expert-pwa .alert-warning { background: #fffbeb; color: #92400e; }
+.expert-pwa .alert-warning .alert-icon { color: var(--expert-warning); }
+.expert-pwa .alert-info { background: #e0f2fe; color: #0369a1; }
+.expert-pwa .alert-info .alert-icon { color: var(--expert-info); }
+.expert-pwa .alert .alert-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 0.05rem; }
+.expert-pwa .alert .btn-close { margin-left: auto; }
+
+/* Cards */
+.expert-pwa .card { border: none; border-radius: var(--expert-radius); box-shadow: var(--expert-shadow); background: var(--expert-card-bg); }
+.expert-pwa .card-header { background: var(--expert-card-bg); border-bottom: 1px solid var(--expert-border); font-weight: 600; color: var(--expert-text); padding: 1rem 1.25rem; border-radius: var(--expert-radius) var(--expert-radius) 0 0; }
+
+/* Tables */
+.expert-pwa .table-expert { border-collapse: separate; border-spacing: 0; }
+.expert-pwa .table-expert thead th { background: var(--expert-primary); color: #fff; font-weight: 600; padding: 0.875rem 1rem; border: none; white-space: nowrap; }
+.expert-pwa .table-expert thead th:first-child { border-radius: var(--expert-radius-sm) 0 0 0; }
+.expert-pwa .table-expert thead th:last-child { border-radius: 0 var(--expert-radius-sm) 0 0; }
+.expert-pwa .table-expert tbody tr { background: #fff; }
+.expert-pwa .table-expert tbody tr:nth-child(even) { background: #f9fafb; }
+.expert-pwa .table-expert tbody tr:hover { background: var(--expert-primary-light); }
+.expert-pwa .table-expert tbody td { padding: 0.875rem 1rem; border-bottom: 1px solid var(--expert-border); vertical-align: middle; }
+.expert-pwa .table-expert .table-actions { white-space: nowrap; }
+.expert-pwa .table-expert .table-empty { text-align: center; padding: 2rem; color: var(--expert-text-muted); }
+
+/* Buttons */
+.expert-pwa .btn-success { background: var(--expert-primary); border-color: var(--expert-primary); }
+.expert-pwa .btn-success:hover { background: var(--expert-primary-dark); border-color: var(--expert-primary-dark); }
+.expert-pwa .btn-outline-success { color: var(--expert-primary); border-color: var(--expert-primary); }
+.expert-pwa .btn-outline-success:hover { background: var(--expert-primary-light); color: var(--expert-primary-dark); border-color: var(--expert-primary); }
+
+/* Form controls */
+.expert-pwa .form-control:focus, .expert-pwa .form-select:focus { border-color: var(--expert-primary); box-shadow: 0 0 0 0.2rem rgba(5, 150, 105, 0.2); }
+.expert-pwa .form-label { font-weight: 600; color: var(--expert-text); }
+.expert-pwa .form-control, .expert-pwa .form-select { border-radius: var(--expert-radius-sm); border-color: #e5e7eb; }
+.expert-pwa .form-control.is-invalid { border-color: var(--expert-danger); }
+.expert-pwa .invalid-feedback { color: var(--expert-danger); font-size: 0.875rem; }
+
+/* Validation error summary */
+.expert-pwa .validation-errors { background: #fee2e2; color: #991b1b; border-radius: var(--expert-radius); padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
+.expert-pwa .validation-errors ul { margin: 0; padding-left: 1.25rem; }
+
+/* Badges */
+.expert-pwa .badge.bg-success { background: var(--expert-primary) !important; }
+.expert-pwa .badge.bg-warning { background: var(--expert-warning) !important; }
+
+/* Page titles */
+.expert-pwa .page-title { font-size: 1.5rem; font-weight: 700; color: var(--expert-text); margin-bottom: 1.25rem; }
+.expert-pwa .page-subtitle { color: var(--expert-text-muted); margin-bottom: 1.5rem; }
+
+/* Empty state */
+.expert-pwa .empty-state { text-align: center; padding: 3rem 1.5rem; color: var(--expert-text-muted); }
+.expert-pwa .empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.6; }
+.expert-pwa .empty-state .empty-title { font-weight: 600; color: var(--expert-text); margin-bottom: 0.5rem; }
+
+/* Modal */
+.expert-pwa .modal-content { border: none; border-radius: var(--expert-radius); box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
+.expert-pwa .modal-header { border-bottom-color: var(--expert-border); }
+.expert-pwa .modal-header .modal-title { font-weight: 600; color: var(--expert-text); }

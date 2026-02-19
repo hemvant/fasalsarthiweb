@@ -6,7 +6,7 @@
 </div>
 
 {{-- Post card --}}
-<div class="card shadow-sm border-0 rounded-3 mb-3">
+<div class="card border-0 shadow-sm mb-3">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-start mb-2">
             <div class="d-flex align-items-center">
@@ -74,7 +74,7 @@
 </div>
 
 {{-- Answers (expert replies) --}}
-<div class="card shadow-sm border-0 rounded-3 mb-3">
+<div class="card border-0 shadow-sm mb-3">
     <div class="card-header bg-white border-bottom"><strong>Answers ({{ $post->answers->count() }})</strong></div>
     <div class="card-body">
         @forelse($post->answers as $answer)

@@ -5,9 +5,9 @@
     <a href="{{ route('expert.questions.index') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Back to Community</a>
 </div>
 
-<div class="card shadow-sm border-0 rounded-3">
+<div class="card border-0 shadow-sm">
     <div class="card-body">
-        <h4 class="card-title mb-4">Share with Community</h4>
+        <h4 class="page-title mb-4">Share with Community</h4>
 
         <form action="{{ route('expert.questions.store') }}" method="POST" enctype="multipart/form-data">
             @csrf

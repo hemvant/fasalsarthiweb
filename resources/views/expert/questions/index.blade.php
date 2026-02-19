@@ -1,8 +1,8 @@
 @extends('expert.layout')
 @section('title', 'Community')
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="mb-0">Community</h3>
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <h3 class="page-title mb-0">Community</h3>
     <a href="{{ route('expert.questions.create') }}" class="btn btn-success"><i class="fas fa-plus me-1"></i> New post</a>
 </div>
 
@@ -32,7 +32,7 @@
 
 <div class="list-group list-group-flush">
     @forelse($questions as $q)
-    <div class="card shadow-sm mb-3 border-0 rounded-3 overflow-hidden">
+    <div class="card shadow-sm mb-3 border-0 overflow-hidden">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-start mb-2">
                 <div class="d-flex align-items-center">
@@ -76,12 +76,13 @@
         </div>
     </div>
     @empty
-    <div class="card border-0 shadow-sm">
-        <div class="card-body text-center py-5 text-muted">
-            <i class="fas fa-users fa-3x mb-3"></i>
-            <p class="mb-0">No posts match your filters. Change filters or check back later.</p>
-        </div>
+<div class="card border-0 shadow-sm">
+    <div class="empty-state">
+        <div class="empty-icon"><i class="fas fa-users"></i></div>
+        <p class="empty-title">No posts found</p>
+        <p class="mb-0">Change filters or check back later.</p>
     </div>
+</div>
     @endforelse
 </div>
 @if($questions->hasPages())
